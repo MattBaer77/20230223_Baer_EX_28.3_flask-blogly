@@ -74,9 +74,6 @@ class Tag(db.Model):
     name = db.Column(db.String(100),
                     nullable=False,
                     unique=True)
-
-    # posts = db.relationship('Post', secondary='post_tags', backref ='tags')
-
     
 class PostTag(db.Model):
     """Post Tag"""
@@ -94,5 +91,3 @@ class PostTag(db.Model):
                     nullable=False)
 
     __table_args__ = (db.UniqueConstraint('post_id', 'tag_id'),)
-
-    # __table_args__ = (UniqueConstraint('post_id', 'tag_id', name="post_tag_combination"))
