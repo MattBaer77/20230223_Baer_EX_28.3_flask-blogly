@@ -58,3 +58,41 @@ class Post(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),
                     nullable=False)
+
+    post_tags = db.relationship('PostTag', backref ='post_tagged')
+    tags = db.relationship('Tag', secondary='post_tags', backref ='posts')
+
+class Tag(db.Model):
+    """Tag"""
+
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+
+    name = db.Column(db.String(100),
+                    nullable=False,
+                    unique=True)
+
+    # posts = db.relationship('Post', secondary='post_tags', backref ='tags')
+
+    
+class PostTag(db.Model):
+    """Post Tag"""
+
+    __tablename__ = 'post_tags'
+
+    post_id = db.Column(db.Integer,
+                    db.ForeignKey("posts.id"),
+                    primary_key=True,
+                    nullable=False)
+
+    tag_id = db.Column(db.Integer,
+                    db.ForeignKey("tags.id"),
+                    primary_key=True,
+                    nullable=False)
+
+    __table_args__ = (db.UniqueConstraint('post_id', 'tag_id'),)
+
+    # __table_args__ = (UniqueConstraint('post_id', 'tag_id', name="post_tag_combination"))
