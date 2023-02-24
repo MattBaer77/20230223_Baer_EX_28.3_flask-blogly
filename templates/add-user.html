@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Blogly Add User{% endblock %}
+
+{% block content %}
+
+<h1>Create a User</h1>
+
+<form action="/users/new" method="POST">
+
+    <div class="mb-3">
+        <label for="first_name" class="form-label">First Name</label>
+        <input type="text" class="form-control" name="first_name" placeholder="Enter a first name">
+    </div>
+
+    <div class="mb-3">
+        <label for="last_name" class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="last_name" placeholder="Enter a last name">
+    </div>
+
+    <div class="mb-3">
+        <label for="img_url" class="form-label">Image URL</label>
+        <input type="text" class="form-control" name="img_url" placeholder="Provide an image of this user">
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button class="btn btn-success">Add</button>
+    </div>
+
+</form>
+
+
+{% endblock %}

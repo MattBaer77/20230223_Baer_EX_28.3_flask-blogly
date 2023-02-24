@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{user.first_name}} {{user.last_name}} Details{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+        {% if user.img_url is none %}
+            <img class="w-100 rounded" src="{{url_for('static', filename='default.png')}}" alt="Image of {{user.first_name}} {{user.last_name}}">
+        {% else %}
+            <img class="w-100 rounded" src="{{user.img_url}}" alt="Image of {{user.first_name}} {{user.last_name}}">
+        {% endif %}
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h1>{{user.first_name}} {{user.last_name}}</h1>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <a href="/users/{{user.id}}/edit"><button class="btn btn-primary">Edit</button></a>
+                    <form action="/users/{{user.id}}/delete" method="POST" style="display: inline;"><button class="btn btn-danger">Delete</button></form>
+                </div>
+                <div class="mt-3">
+                    <h2>Posts</h2>
+                    <ul>
+                    {% for post in user_posts %}
+                        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+                    {% endfor %}
+                    </ul>
+                    <a href="/users/{{user.id}}/posts/add"><button class="btn btn-primary">Add Post</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

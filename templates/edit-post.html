@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Blogly Edit Post{% endblock %}
+
+{% block content %}
+
+<h1>Edit Post {{post.id}}</h1>
+
+<form action="/posts/{{post.id}}/edit" method="POST">
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" placeholder="Enter a title" value="{{post.title}}">
+    </div>
+
+    <div class="mb-3">
+        <label for="content" class="form-label">Post Content</label>
+        <textarea class="form-control" name="content" rows="5" placeholder="Enter some content">{{post.content}}</textarea>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-center">
+        <a href="/posts/{{post.id}}"><button type="button" class="btn btn-success btn-outline">Cancel</button></a>
+        <button class="btn btn-success">Save</button>
+    </div>
+
+</form>
+
+{% endblock %}
