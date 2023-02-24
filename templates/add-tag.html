@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Blogly Add Tag{% endblock %}
+
+{% block content %}
+
+<h1>Create a tag</h1>
+
+<form action="/tags/new" method="POST">
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" name="name" placeholder="Enter a tag name">
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-center">
+        <a href="/tags/new"><button type="button" class="btn btn-success btn-outline">Cancel</button></a>
+        <button class="btn btn-success">Save</button>
+    </div>
+
+</form>
+
+{% endblock %}
