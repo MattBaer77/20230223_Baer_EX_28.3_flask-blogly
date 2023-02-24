@@ -118,7 +118,9 @@ def post_add(user_id):
     """shows a form to add a post for a particular user"""
 
     user = User.query.get_or_404(user_id)
-    return render_template("add-post.html", user=user)
+    tags = Tag.query.all()
+
+    return render_template("add-post.html", user=user, tags=tags)
 
 @app.route('/users/<int:user_id>/posts/add', methods=["POST"])
 def post_add_submit(user_id):
@@ -129,9 +131,12 @@ def post_add_submit(user_id):
     title = request.form["title"]
     content = request.form["content"]
 
-    new_post = Post(title=title, content=content, user_id=user_id)
+    post = Post(title=title, content=content, user_id=user_id)
 
-    db.session.add(new_post)
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
+
+    db.session.add(post)
     db.session.commit()
 
     return redirect(f"/users/{user_id}")
@@ -155,7 +160,9 @@ def edit_post_details_form(post_id):
 
     post = Post.query.get(post_id)
 
-    return render_template("edit-post.html", post=post)
+    tags = Tag.query.all()
+
+    return render_template("edit-post.html", post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/edit', methods=["POST"])
 def edit_post_details_submit(post_id):
@@ -168,6 +175,11 @@ def edit_post_details_submit(post_id):
 
     post.title = title
     post.content = content
+
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
+
+    db.session.add(post)
 
     db.session.commit()
 

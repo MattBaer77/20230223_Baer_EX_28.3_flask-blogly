@@ -18,6 +18,17 @@
         <textarea class="form-control" name="content" rows="5" placeholder="Enter some content"></textarea>
     </div>
 
+    <div class="mb-3 d-flex gap-2 justify-content-center" role="group">
+
+        {% for tag in tags %}
+
+        <input type="checkbox" class="btn-check" value="{{tag.id}}" id="tag_{{tag.id}}" name="tags">
+        <label for="tag_{{tag.id}}" class="btn btn-outline-primary">{{tag.name}}</label>
+
+        {% endfor %}
+
+    </div>
+
     <div class="d-grid gap-2 d-md-flex justify-content-center">
         <a href="/users/<int:user_id>"><button type="button" class="btn btn-success btn-outline">Cancel</button></a>
         <button class="btn btn-success">Save</button>
