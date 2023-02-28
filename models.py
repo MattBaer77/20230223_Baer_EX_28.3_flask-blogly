@@ -33,6 +33,7 @@ class User(db.Model):
                     unique=False)
 
     posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
+    # 'cascade="all, delete-orphan"' CAN be deleted here without effecting the behavior of the app
 
 class Post(db.Model):
     """Post Model"""
@@ -56,10 +57,12 @@ class Post(db.Model):
                     nullable=False,
                     default=datetime.now)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'),
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), # "ondelete='CASCADE'" CANNOT be deleted here - if it is, that reproduces the orginal issue.
                     nullable=False)
 
     post_tags = db.relationship('PostTag', backref ='post_tagged', cascade='all, delete-orphan')
+    # 'cascade="all, delete-orphan"' CANNOT be deleted here without effecting the behavior of the app - DELETING a post which has a tag ceases to function if this is removed.
+
     tags = db.relationship('Tag', secondary='post_tags', backref ='posts')
 
 class Tag(db.Model):
@@ -81,11 +84,15 @@ class PostTag(db.Model):
     __tablename__ = 'post_tags'
 
     post_id = db.Column(db.Integer,
-                    db.ForeignKey("posts.id", ondelete='CASCADE'),
+                    db.ForeignKey("posts.id", ondelete='CASCADE'), # "ondelete='CASCADE" CAN be deleted here. As long as the cascade=all, delete-orphan remains everything continues to work
                     primary_key=True,
                     nullable=True)
 
     tag_id = db.Column(db.Integer,
-                    db.ForeignKey("tags.id", ondelete='CASCADE'),
+                    db.ForeignKey("tags.id", ondelete='CASCADE'), # "ondelete='CASCADE" CAN be deleted here. As long as the cascade=all, delete-orphan remains everything continues to work
                     primary_key=True,
                     nullable=True)
+
+# MIKAEL - Code is exhibiting two completely different behaviors - for the relationship between Post and Users - your solution works, however it does not work when implemented on the solution between Post and PostTag - instead cascade='all, delete-orphan' MUST be included. I am at a loss for why only differing solutions seem to work in these two very similar cases.
+
+# Hedging my bets and just doing both seems to be failsafe... at least in this case. Trying to find a solution that produces consistant behavior when using these tools so I am not just guessing.
