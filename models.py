@@ -25,7 +25,7 @@ class User(db.Model):
                     unique=False)
 
     last_name = db.Column(db.String(20),
-                    nullable=False,
+                    nullable=True,
                     unique=True)
     
     img_url = db.Column(db.String(),
@@ -56,10 +56,10 @@ class Post(db.Model):
                     nullable=False,
                     default=datetime.now)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'),
                     nullable=False)
 
-    post_tags = db.relationship('PostTag', backref ='post_tagged')
+    post_tags = db.relationship('PostTag', backref ='post_tagged', cascade='all, delete-orphan')
     tags = db.relationship('Tag', secondary='post_tags', backref ='posts')
 
 class Tag(db.Model):
@@ -81,13 +81,11 @@ class PostTag(db.Model):
     __tablename__ = 'post_tags'
 
     post_id = db.Column(db.Integer,
-                    db.ForeignKey("posts.id"),
+                    db.ForeignKey("posts.id", ondelete='CASCADE'),
                     primary_key=True,
-                    nullable=False)
+                    nullable=True)
 
     tag_id = db.Column(db.Integer,
-                    db.ForeignKey("tags.id"),
+                    db.ForeignKey("tags.id", ondelete='CASCADE'),
                     primary_key=True,
-                    nullable=False)
-
-    __table_args__ = (db.UniqueConstraint('post_id', 'tag_id'),)
+                    nullable=True)
